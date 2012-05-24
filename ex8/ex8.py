@@ -9,4 +9,4 @@ print formatter % (
     "That you could type up right.",
     "But it didn't sing.",
     "So I said goodnight."
-)
+) # This outputs double quotes around "But it didn't sing", likely due to the apostrophe.
