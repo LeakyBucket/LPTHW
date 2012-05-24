@@ -5,7 +5,7 @@ binary = "binary"
 # Setting do_not to the string "don't"
 do_not = "don't"
 # Setting y to a formatted string with two substitutions
-y = "Those who know %s and those who %s." % (binary, do_not)
+y = "Those who know %s and those who %s." % (binary, do_not) # String inside a string
 
 # Printing x
 print x
@@ -13,9 +13,9 @@ print x
 print y
 
 # Printing a formatted string containing the string assigned to x
-print "I said: %r" % x
+print "I said: %r" % x # String inside a string
 # Printing a formatted string containing the string assigned to y
-print "I also said: '%s'." % y
+print "I also said: '%s'." % y # String inside a string
 
 # Setting hilarious to False
 hilarious = False
