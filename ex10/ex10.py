@@ -16,3 +16,10 @@ print persian_cat
 print backslash_cat
 print fat_cat
 print sub_cat % ("\n", "\n", "\n", "\n", "\n")
+
+r = "%r"
+single_escape = 'The dog\'s ate everything.'
+double_escape = "\"No!\""
+
+print r % single_escape
+print r % double_escape
