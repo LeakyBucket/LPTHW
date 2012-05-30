@@ -9,7 +9,10 @@ I'll do a list:
 \t* Catnip\n\t* Grass
 '''
 
+sub_cat = "Why%sare%sthere%sso%smany%slines?"
+
 print tabby_cat
 print persian_cat
 print backslash_cat
 print fat_cat
+print sub_cat % ("\n", "\n", "\n", "\n", "\n")
