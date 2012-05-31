@@ -11,4 +11,4 @@ print "So, you're %r old %r tall and %r heavy." % (age, height, weight)
 #   it then reads from STDIN until it sees a new line.  The stream is converted
 #   to a string.  The trailing newline is stripped from the input.
 
-print raw_input('Echo> ')
+print raw_input('echo chamber: ')
