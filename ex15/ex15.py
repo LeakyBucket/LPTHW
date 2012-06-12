@@ -1,8 +1,4 @@
-# Adding argv from the sys module
-from sys import argv
-
-# Assigning commandline arguments to local variables
-script, filename = argv
+filename = raw_input("Which file do you want? ")
 
 # Assigning txt to the file passed on the commandline
 txt = open(filename)
