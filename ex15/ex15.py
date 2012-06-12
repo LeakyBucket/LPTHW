@@ -7,3 +7,5 @@ txt = open(filename)
 print "Here's your file %r:" % filename
 # Printing the contents of the file assigned to txt
 print txt.read()
+
+txt.close()
