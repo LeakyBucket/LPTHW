@@ -43,11 +43,11 @@ current_line = 1
 print_a_line(current_line, current_file)
 
 # set current_line to 2
-current_line = current_line + 1
+current_line += 1
 # call print_a_line with current_line and current_file as arguments
 print_a_line(current_line, current_file)
 
 # set current_line to 3
-current_line = current_line + 1
+current_line +=  1
 # call print_a_line with current_line and current_file as arguments
 print_a_line(current_line, current_file)
