@@ -6,26 +6,24 @@ SCANNER = <<-SCAN.gsub(/^ {12}/, '')
             for line in target.readlines():
               if(line[0] != '#'):
                 if (method_match.search(line) is not None):
-                  method.add(method_match.search(line).group())
+                  method.add(method_match.search(line).group().strip())
                 if (variable_match.search(line) is not None):
-                  variable.add(variable_match.search(line).group())
+                  variable.add(variable_match.search(line).group().strip())
                 if (key_word_match.search(line) is not None):
-                  key_word.add(key_word_match.search(line).group())
+                  key_word.add(key_word_match.search(line).group().strip())
           SCAN
 
 TOKENS = %w(method variable key_word)
 
 REGEXES = { variable: ['\s*(\w*?)=', '\s(\w*?)\s', '\s(\w*?)\.'],
-            method: ['\s*(\w*?)\(.*\)', '\.(\w*?)\(.*\)'],
-            key_word: ['\s*(\w*?)\s']
+            method: ['\s*(\w*?)\(', '\.(\w*?)\('],
+            key_word: ['\s*(\w*?)\s', '\((\w*?)\w*?\)']
           }
 
 
 parser = PythonWriter.new ARGV.shift
 
 Dir.chdir('..')
-
-path = 'my_dir'
 
 # Add our imports
 ['re', 'inspect', 'os', 'sys'].each { |mod| parser.add_import mod }
