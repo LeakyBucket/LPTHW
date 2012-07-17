@@ -9,7 +9,7 @@ variable = Set([])
 key_word = Set([])
 method_match = re.compile('\s*(\w*?)\(|\.(\w*?)\(')
 variable_match = re.compile('\s*(\w*?)\s?=')
-key_word_match = re.compile('(?<!")\s*(\w*?)\s(?!=)')
+key_word_match = re.compile('(?<!")\s*(\w*?)\s(?!=)|(?!=")')
 for file in files:
   target = open(file)
   for line in target.readlines():

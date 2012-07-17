@@ -17,7 +17,7 @@ TOKENS = %w(method variable key_word)
 
 REGEXES = { variable: ['\s*(\w*?)\s?='],
             method: ['\s*(\w*?)\(', '\.(\w*?)\('],
-            key_word: ['(?<!")\s*(\w*?)\s(?!=)']
+            key_word: ['(?<!")\s*(\w*?)\s(?!=)|(?!=")']
           }
 
 
