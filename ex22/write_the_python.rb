@@ -2,6 +2,14 @@
 
 require './python_writer'
 
+USAGE = <<USE
+  Usage:
+  
+  write_the_python.rb <python_file>
+
+  <python_file> should be the name of the file to be generated.
+USE
+
 SCANNER = <<-SCAN.gsub(/^ {12}/, '')
             for line in target.readlines():
               if (line[0] != '#'):
@@ -15,11 +23,16 @@ SCANNER = <<-SCAN.gsub(/^ {12}/, '')
 
 TOKENS = %w(method variable key_word)
 
-REGEXES = { variable: ['\s*(\w+?)\s?=', '[(|\s](\w+?)[,|)]'],
-            method: ['\s*(\w+?)\(', '\.(\w+?)\('],
-            key_word: ['(?<!")\s*(\w+?)\s(?!=)|(?!=")']
+REGEXES = { :variable => ['\s*(\w+?)\s?=', '[(|\s](\w+?)[,|)]'],
+            :method => ['\s*(\w+?)\(', '\.(\w+?)\('],
+            :key_word => ['(?<!")\s*(\w+?)\s(?!=)|(?!=")']
           }
 
+
+if ARGV.empty?
+  puts USAGE
+  exit
+end
 
 parser = PythonWriter.new ARGV.shift
 
