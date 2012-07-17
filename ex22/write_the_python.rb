@@ -4,7 +4,7 @@ require './python_writer'
 
 SCANNER = <<-SCAN.gsub(/^ {12}/, '')
             for line in target.readlines():
-              if(line[0] != '#'):
+              if (line[0] != '#'):
                 if (method_match.search(line) is not None):
                   method.add(method_match.search(line).group().strip())
                 if (variable_match.search(line) is not None):
@@ -17,7 +17,7 @@ TOKENS = %w(method variable key_word)
 
 REGEXES = { variable: ['\s*(\w*?)=', '\s(\w*?)\s', '\s(\w*?)\.'],
             method: ['\s*(\w*?)\(', '\.(\w*?)\('],
-            key_word: ['\s*(\w*?)\s', '\((\w*?)\w*?\)']
+            key_word: ['\s*(\w*?)\s(?!=)', '\((\w*?)\w*?\)']
           }
 
 
@@ -49,5 +49,7 @@ parser.write SCANNER
 parser.undent
 
 parser.add_print "Here are the Methods: %r", 'method'
+parser.add_print "\\n"
 parser.add_print "Here are the Variables: %r", 'variable'
+parser.add_print "\\n"
 parser.add_print "Here are the Key Words: %r", 'key_word'
