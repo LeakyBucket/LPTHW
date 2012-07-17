@@ -7,9 +7,9 @@ files = ["ex1/ex1.py", "ex10/ex10.py", "ex11/ex11.3.py", "ex11/ex11.py", "ex12/e
 method = Set([])
 variable = Set([])
 key_word = Set([])
-method_match = re.compile('\s*(\w*?)\(|\.(\w*?)\(')
-variable_match = re.compile('\s*(\w*?)\s?=|[(|\s](\w*?)[,|)]')
-key_word_match = re.compile('(?<!")\s*(\w*?)\s(?!=)|(?!=")')
+method_match = re.compile('\s*(\w+?)\(|\.(\w+?)\(')
+variable_match = re.compile('\s*(\w+?)\s?=|[(|\s](\w+?)[,|)]')
+key_word_match = re.compile('(?<!")\s*(\w+?)\s(?!=)|(?!=")')
 for file in files:
   target = open(file)
   for line in target.readlines():

@@ -15,9 +15,9 @@ SCANNER = <<-SCAN.gsub(/^ {12}/, '')
 
 TOKENS = %w(method variable key_word)
 
-REGEXES = { variable: ['\s*(\w*?)\s?=', '[(|\s](\w*?)[,|)]'],
-            method: ['\s*(\w*?)\(', '\.(\w*?)\('],
-            key_word: ['(?<!")\s*(\w*?)\s(?!=)|(?!=")']
+REGEXES = { variable: ['\s*(\w+?)\s?=', '[(|\s](\w+?)[,|)]'],
+            method: ['\s*(\w+?)\(', '\.(\w+?)\('],
+            key_word: ['(?<!")\s*(\w+?)\s(?!=)|(?!=")']
           }
 
 
