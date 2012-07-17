@@ -9,19 +9,20 @@ variable = Set([])
 key_word = Set([])
 method_match = re.compile('\s*(\w+?)\(|\.(\w+?)\(')
 variable_match = re.compile('\s*(\w+?)\s?=|[(|\s](\w+?)[,|)]')
-key_word_match = re.compile('(?<!")\s*(\w+?)\s(?!=)|(?!=")')
+key_word_match = re.compile('(?<!")\w*?\s*?(\w+?)\s(?!=)|(?!=")')
 for file in files:
   target = open(file)
   for line in target.readlines():
     if (line[0] != '#'):
       if (method_match.search(line) is not None):
-        method.add(method_match.search(line).group().strip())
+        for match in method_match.finditer(line):
+          method.add(match.group().strip())
       if (variable_match.search(line) is not None):
-        variable.add(variable_match.search(line).group().strip())
+        for match in variable_match.finditer(line):
+          variable.add(match.group().strip())
       if (key_word_match.search(line) is not None):
-        key_word.add(key_word_match.search(line).group().strip())
-print "Here are the Methods: %r" % (method)
-print "\n"
-print "Here are the Variables: %r" % (variable)
-print "\n"
+        for match in key_word_match.finditer(line):
+          key_word.add(match.group().strip())
+print "Here are the Methods: %r\n" % (method)
+print "Here are the Variables: %r\n" % (variable)
 print "Here are the Key Words: %r" % (key_word)
