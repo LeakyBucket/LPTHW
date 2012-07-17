@@ -17,25 +17,11 @@ end
 
 parser = PythonWriter.new ARGV.shift
 
-SCANNER = <<-SCAN.gsub(/^ {12}/, '')
-            for line in target.readlines():
-              if (line[0] != '#'):
-                if (method_match.search(line) is not None):
-                  for match in method_match.finditer(line):
-                    method.add(match.group().strip())
-                if (variable_match.search(line) is not None):
-                  for match in variable_match.finditer(line):
-                    variable.add(match.group().strip())
-                if (key_word_match.search(line) is not None):
-                  for match in key_word_match.finditer(line):
-                    key_word.add(match.group().strip())
-          SCAN
-
 TOKENS = %w(method variable key_word)
 
 REGEXES = { :variable => ['\s*(\w+?)\s?=', '[(|\s](\w+?)[,|)]'],
             :method => ['\s*(\w+?)\(', '\.(\w+?)\('],
-            :key_word => ['(?<!")\w*?\s*?(\w+?)\s(?!=)|(?!=")']
+            :key_word => ['(?<!")\s+?(\w+?)\s(?!=)|(?!=")']
           }
 
 
@@ -61,8 +47,25 @@ end
 parser.for_in 'files', 'file'
 parser.indent
 parser.write 'target = open(file)'
-parser.write SCANNER
-parser.undent
+parser.for_in 'target.readlines()', 'line'
+parser.indent
+parser.write 'if (line[0] != \'#\'):'
+parser.indent
+
+TOKENS.each do |token|
+  parser.write "if (#{token}_match.search(line) is not None):"
+  parser.indent
+  parser.for_in "#{token}_match.finditer(line)", "match"
+  parser.indent
+  parser.write "#{token}.add(match.group().strip())"
+  parser.undent
+  parser.undent
+end
+
+#parser.write SCANNER
+1.upto(3) do
+  parser.undent
+end
 
 parser.add_print "Here are the Methods: %r\\n", 'method'
 parser.add_print "Here are the Variables: %r\\n", 'variable'
