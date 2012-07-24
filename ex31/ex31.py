@@ -30,4 +30,16 @@ elif door == "2":
     print "The insanity rots your eyes into a pool of muck.  Good job!"
 
 else:
-  print "You stumble around and fall on a knife and die.  Good job!"
+  print "Hmmm... It appears there is a hole in the floor."
+  print "Go down the hole?"
+
+  hole = raw_input("> ")
+
+  if hole == "y" or hole == "yes":
+    print "You are falling, and falling, and falling..."
+    print "."
+    print "."
+    print "."
+    print "splat!"
+  else:
+    print "You curl up in the corner and starve to death.  Hooray!"
