@@ -5,7 +5,7 @@ def count_and_fill(start, limit):
     print "At the top start is %d" % start
     numbers.append(start)
 
-    start = start + 1
+    start = start + 3
     print "Numbers now: ", numbers
     print "At the bottom start is %d" % start
 
