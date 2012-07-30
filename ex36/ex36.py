@@ -27,21 +27,24 @@ class Room:
       self.enter = 'bottom'
 
   def generate_monster():
-  monsters[randrange(0, monsters.length, 1)]
+  monsters[randrange(0, monsters.length - 1, 1)]
 
   def generate_treasure():
-  treasure[randrange(0, treasure.length, 1)]
+  treasure[randrange(0, treasure.length - 1, 1)]
 
   def generate_weapon():
-  weapons[randrange(0, weapons.length, 1)]
+  weapons[randrange(0, weapons.length - 1, 1)]
 
 
 
 class Monster:
   """Monster represents a monster"""
-  def __init__(arg):
-    self.type = arg
+  def __init__(name, *args):
+    self.type = name
     self.alive = True
+    self.title = args[0]
+    self.life = args[1]
+    self.damage = args[2]
 
 
 
@@ -94,7 +97,7 @@ class Player:
     self.inventory.add(item)
 
   def check_inventory():
-    print "You have"
+    return(self.inventory)
 
   def equip_weapon(weapon):
     for item in inventory:
