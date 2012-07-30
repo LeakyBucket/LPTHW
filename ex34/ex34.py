@@ -1,4 +1,6 @@
 animals = ['bear', 'python', 'peacock', 'kangaroo', 'whale', 'platypus']
+              0        1         2           3  
+
 
 print animals[1]
 print animals[2]
