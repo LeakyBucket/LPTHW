@@ -168,7 +168,7 @@ class Player:
   def take_damage(self, amount):
     self.life -= amount
     if self.life <= 0:
-      die()
+      self.die()
 
   def die(self):
     print "You died!"
@@ -209,10 +209,10 @@ class State():
     return(self.room)
 
   def last_room(self):
-    self.room is self.labrynth.last_room()
+    return(self.room is self.labrynth.last_room())
 
   def first_room(self):
-    self.room is self.labrynth.first_room()
+    return(self.room is self.labrynth.first_room())
 
 
 
@@ -252,10 +252,12 @@ class Action():
 
   def pick_up(self, command):
     room = self.state.current_room()
-    if room.treasure and match(room.treasure.name, ' '.join(split(' ', command)[1::])):
+    target = ' '.join(split(' ', command)[1::])
+
+    if room.treasure and match(room.treasure.name, target):
       self.player.add_item(room.treasure)
       print "You shove the %s into your pocket." % room.treasure.name
-    elif room.weapon and match(room.weapon.name, ' '.join(split(' ', command)[1::])):
+    elif room.weapon and match(room.weapon.name, target):
       self.player.add_weapon(room.weapon)
       print "You now have a wonderful %s to hurt things with." % room.weapon.name
 
@@ -263,11 +265,16 @@ class Action():
     return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
 
   def attack(self, command):
+    monster = self.state.current_room().monster
+
     if self.check_enemy(command):
       if randint(1, 20) > 8:
-        print 'The %s looks %s.' % (self.state.current_room().monster.type, self.state.current_room().monster.take_damage(self.player.damage))
+        print 'The %s looks %s.' % (monster.type, monster.take_damage(self.player.damage))
       else:
         print 'You missed.'
+        if randint(1, 20) > 12:
+          self.player.take_damage(monster.damage)
+          print 'And it hurt!'
     else:
       if self.state.current_room().monster.alive:
         print "I don't see one of those here?"
