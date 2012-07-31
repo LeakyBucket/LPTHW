@@ -1,5 +1,8 @@
 from sys import exit
-from random import randint   
+from random import randint
+from re import match
+from re import split
+from re import findall
 
 monsters = ['Troll', 'Goblin', 'Ogre', 'Hobgoblin', 'Politician', 'Grue']
 enemy_levels = [['Tough', 200, 20], ['Average', 100, 10], ['Wimpy', 50, 5]]
@@ -27,6 +30,9 @@ class Labrynth:
   def previous_room(self, room):
     return(self.the_map[self.the_map.index(room) - 1])
 
+  def last_room(self):
+    return(self.the_map[-1])
+
 
 
 class Room:
@@ -40,6 +46,9 @@ class Room:
       self.enter = 'back behind you'
 
     self.generate_content(randint(0, 3))
+
+  def __eq__(self, other):
+    return self.uid == other.uid
 
 
   def generate_monster(self):
@@ -101,12 +110,23 @@ class Monster:
     self.title = args[0]
     self.life = args[1]
     self.damage = args[2]
+    self.max_health = args[1]
 
   def state(self):
     self.state
 
-  def title():
-    return(self.title + ' ' + self.name)
+  def take_damage(self, damage):
+    self.life -= damage
+
+    if self.life >= self.max_health/2:
+      self.state = "Injured"
+    elif self.life >= self.max_health/4:
+      self.state = "Maimed"
+    elif self.life <= 0:
+        self.state = "Dead"
+        self.alive = False
+
+    return self.state
 
 
 
@@ -140,11 +160,11 @@ class Inventory:
 
 class Player:
   """The Player"""
-  def __init__(self, name):
-    self.name = name
+  def __init__(self):
     self.inventory = Inventory()
     self.life = 100
     self.alive = True
+    self.damage = 25
 
   def take_damage(self, amount):
     self.life -= amount
@@ -173,21 +193,90 @@ class Player:
 class State():
   """Game State"""
   def __init__(self, labrynth):
+    self.labrynth = labrynth
     self.room = labrynth.first_room()
 
-  def next_room(self, labrynth):
-    self.room = labrynth.next_room(self.room)
+  def next_room(self):
+    self.room = self.labrynth.next_room(self.room)
 
-  def previous_room(self, labrynth):
-    self.room = labrynth.previous_room(self.room)
+  def previous_room(self):
+    self.room = self.labrynth.previous_room(self.room)
 
   def current_room(self):
     return(self.room)
+
+  def last_room(self):
+    self.room is self.labrynth.last_room()
+
+  def first_room(self):
+    self.room is self.labrynth.first_room()
+
+
+
+class Action():
+  """Process Player Action"""
+  def __init__(self, player, state):
+    self.player = player
+    self.state = state
+
+  def move(self, state, direction):
+    if findall(split(' ', state.current_room().exit)[-1], direction):
+      if state.last_room():
+        print "Hooray, freedom!"
+        exit(0)
+      else:
+        state.next_room()
+        return True
+    elif findall(split(' ', state.current_room().enter)[-1], direction):
+      if state.first_room():
+        print "Sorry, you can't actually go that way."
+        return True
+      else:
+        state.previous_room()
+        return True
+    else:
+      return(False)
+
+  def check_clear(self, state, command):
+    if state.current_room().monster and state.current_room().monster.alive:
+      print "The %s won't let you!" % state.current_room().monster.type
+      return(False)
+    else:
+      return self.move(state, command)
+
+  def check_enemy(self, command):
+    return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
+
+  def attack(self, command):
+    if self.check_enemy(command):
+      if randint(1, 20) > 8:
+        print 'The %s looks %s.' % (self.state.current_room().monster.type, self.state.current_room().monster.take_damage(self.player.damage))
+      else:
+        print 'You missed.'
+    else:
+      if self.state.current_room().monster.alive:
+        print "I don't see one of those here?"
+      else:
+        print "It looks to be dead already."
 
 
 
 labrynth = Labrynth(randint(1, 10))
 state = State(labrynth)
+player = Player()
+action = Action(player, state)
 
 print "You enter the Labrynth..."
 print "You find yourself in a room.  %s" % state.current_room().describe()
+
+while True:
+  command = raw_input('What do you do> ')
+
+  if match('go', command):
+    if action.check_clear(state, command):
+      print "Another room.  %s" % state.current_room().describe()
+      command = ''
+  elif match('attack', command):
+    action.attack(command)
+  elif match('look', command):
+    print state.current_room().describe()
