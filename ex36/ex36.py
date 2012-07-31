@@ -6,8 +6,8 @@ from re import findall
 
 monsters = ['Troll', 'Goblin', 'Ogre', 'Hobgoblin', 'Politician', 'Grue']
 enemy_levels = [['Tough', 200, 20], ['Average', 100, 10], ['Wimpy', 50, 5]]
-treasure = ['Garbage', 'Penny', 'Cash Money', 'Car']
-weapons = ['Rock', 'Stick', 'Sharp Whit', 'Sword', 'Foul Odor']
+treasure = [['Garbage', 0], ['Penny', 100], ['Cash Money', 500], ['Car', 10000]]
+weapons = [['Rock', 10], ['Stick', 15], ['Sharp Wit', 5], ['Sword', 50], ['Foul Odor', 25]]
 
 
 class Labrynth:
@@ -130,16 +130,18 @@ class Monster:
 
 class Treasure:
   """Treasure represents a collectible Item in the Game"""
-  def __init__(self, arg):
-    self.name = arg
+  def __init__(self, args):
+    self.name = args[0]
+    self.value = args[1]
 
 
 
 
 class Weapon:
   """Weapon represents a weapon in the Game"""
-  def __init__(self, arg):
-    self.name = arg
+  def __init__(self, args):
+    self.name = args[0]
+    self.damage = args[1]
 
 
 
@@ -174,6 +176,10 @@ class Player:
 
   def add_item(self, item):
     self.inventory.add(item)
+
+  def add_weapon(self, weapon):
+    self.inventory.add(weapon)
+    self.damage += weapon.damage
 
   def check_inventory(self):
     return(self.inventory)
@@ -217,7 +223,10 @@ class Action():
     self.state = state
 
   def move(self, state, direction):
-    if findall(split(' ', state.current_room().exit)[-1], direction):
+    exit_direction = split(' ', state.current_room().exit)[-1]
+    enter_direction = split(' ', state.current_room().enter)[-1]
+
+    if findall(exit_direction, direction):
       if state.last_room():
         print "Hooray, freedom!"
         exit(0)
@@ -243,9 +252,12 @@ class Action():
 
   def pick_up(self, command):
     room = self.state.current_room()
-    if room.treasure and match(room.treasure.name, split(' ', command)[-1]):
+    if room.treasure and match(room.treasure.name, ' '.join(split(' ', command)[1::])):
       self.player.add_item(room.treasure)
       print "You shove the %s into your pocket." % room.treasure.name
+    elif room.weapon and match(room.weapon.name, ' '.join(split(' ', command)[1::])):
+      self.player.add_weapon(room.weapon)
+      print "You now have a wonderful %s to hurt things with." % room.weapon.name
 
   def check_enemy(self, command):
     return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
