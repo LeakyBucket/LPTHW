@@ -150,7 +150,7 @@ class Inventory:
     self.items = []
 
   def add(self, item):
-    self.items << item
+    self.items.append(item)
 
 
 
@@ -240,6 +240,12 @@ class Action():
       return(False)
     else:
       return self.move(state, command)
+
+  def pick_up(self, command):
+    room = self.state.current_room()
+    if room.treasure and match(room.treasure.name, split(' ', command)[-1]):
+      self.player.add_item(room.treasure)
+      print "You shove the %s into your pocket." % room.treasure.name
 
   def check_enemy(self, command):
     return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
