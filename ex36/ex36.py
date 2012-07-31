@@ -48,7 +48,7 @@ class Room:
     self.generate_content(randint(0, 3))
 
   def __eq__(self, other):
-    return self.uid == other.uid
+    return self.__dict__ == other.__dict__
 
 
   def generate_monster(self):
@@ -277,6 +277,8 @@ while True:
     action.attack(command)
   elif match('look', command):
     print state.current_room().describe()
+  elif match('get', command):
+    action.pick_up(command)
   elif match('quit', command):
     exit(0)
   else:
