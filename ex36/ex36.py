@@ -68,25 +68,22 @@ class Room:
       self.monster = False
       self.treasure = False
       self.weapon = False
-      self.description = 'Amazingly empty here, there is a door ' + self.exit + ' and another one ' + self.enter
+      self.description = 'Amazingly empty here.'
     elif number == 1:
       self.generate_monster()
       self.treasure = False
       self.weapon = False
       self.description = 'Some rubble here, also a %s %s %s.' % (self.monster.state, self.monster.title, self.monster.type)
-      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
     elif number == 2:
       self.generate_monster()
       self.generate_treasure()
       self.weapon = False
       self.description = 'Pillars, Piles of junk, and a %s %s %s.  Oh look! %s.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name)
-      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
     elif number == 3:
       self.generate_monster()
       self.generate_treasure()
       self.generate_weapon()
       self.description = 'Fancy schmancy!  All kinds of wonderful things here.  A %s %s %s.  In the corner we have %s. There is also a %s in the middle of the room.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name, self.weapon.name)
-      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
 
   def monster(self):
     self.monster
@@ -98,7 +95,7 @@ class Room:
     self.weapon
 
   def describe(self):
-    return(self.description)
+    return(self.description + '  You see a door %s and another one %s.' % (self.exit, self.enter))
 
 
 class Monster:
@@ -280,3 +277,7 @@ while True:
     action.attack(command)
   elif match('look', command):
     print state.current_room().describe()
+  elif match('quit', command):
+    exit(0)
+  else:
+    print 'What?'
