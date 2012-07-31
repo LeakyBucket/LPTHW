@@ -64,17 +64,20 @@ class Room:
       self.generate_monster()
       self.treasure = False
       self.weapon = False
-      self.description = 'Some rubble here, also a %s %s %s' % (self.monster.state, self.monster.title, self.monster.type)
+      self.description = 'Some rubble here, also a %s %s %s.' % (self.monster.state, self.monster.title, self.monster.type)
+      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
     elif number == 2:
       self.generate_monster()
       self.generate_treasure()
       self.weapon = False
-      self.description = 'Pillars, Piles of junk, and a %s %s %s.  Oh look! %s' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name)
+      self.description = 'Pillars, Piles of junk, and a %s %s %s.  Oh look! %s.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name)
+      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
     elif number == 3:
       self.generate_monster()
       self.generate_treasure()
       self.generate_weapon()
-      self.description = 'Fancy schmancy!  All kinds of wonderful things here.  A %s %s %s.  In the corner we have %s. There is also a %s in the middle of the room' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name, self.weapon.name)
+      self.description = 'Fancy schmancy!  All kinds of wonderful things here.  A %s %s %s.  In the corner we have %s. There is also a %s in the middle of the room.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name, self.weapon.name)
+      self.description += '  You see a door %s and another one %s.' % (self.exit, self.enter)
 
   def monster(self):
     self.monster
