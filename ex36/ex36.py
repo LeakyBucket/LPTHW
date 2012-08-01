@@ -300,7 +300,8 @@ class Action():
 
     if self.check_enemy(command):
       if randint(1, 20) > 8:
-        print 'The %s looks %s.' % (monster.type, monster.take_damage(self.player.damage))
+        print 'A hit!'
+        print 'The %s appears to be %s.' % (monster.type, monster.take_damage(self.player.damage))
       else:
         print 'You missed.'
         if randint(1, 20) > 12:
