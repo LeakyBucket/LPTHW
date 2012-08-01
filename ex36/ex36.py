@@ -13,6 +13,7 @@ HELP = """
 attack <monster>
 get <item>
 go <direction>
+look
 inventory
 quit
 """
