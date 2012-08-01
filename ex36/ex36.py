@@ -9,6 +9,13 @@ enemy_levels = [['Tough', 200, 20], ['Average', 100, 10], ['Wimpy', 50, 5]]
 treasure = [['Garbage', 0], ['Penny', 100], ['Cash Money', 500], ['Car', 10000]]
 weapons = [['Rock', 10], ['Stick', 15], ['Sharp Wit', 5], ['Sword', 50], ['Foul Odor', 25]]
 
+HELP = """
+attack <monster>
+get <item>
+go <direction>
+inventory
+quit
+"""
 
 class Labrynth:
   """This is the place where the things happen"""
@@ -329,6 +336,8 @@ while True:
     action.show_inventory()
   elif match('get', command):
     action.pick_up(command)
+  elif match('help', command):
+    print HELP
   elif match('quit', command):
     exit(0)
   else:
