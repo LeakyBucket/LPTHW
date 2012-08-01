@@ -1,5 +1,6 @@
 from sys import exit
 from random import randint
+import re
 from re import match
 from re import split
 from re import findall
@@ -246,14 +247,14 @@ class Action():
 
     direction = ' '.join(split(' ', command)[1::])
 
-    if search(direction, exit_direction):
+    if search(direction, exit_direction, re.I):
       if state.last_room():
         print "Hooray, freedom!"
         exit(0)
       else:
         state.next_room()
         return True
-    elif search(direction, enter_direction):
+    elif search(direction, enter_direction, re.I):
       if state.first_room():
         print "Sorry, you can't actually go that way."
         return True
@@ -276,11 +277,11 @@ class Action():
     room = self.state.current_room()
     target = ' '.join(split(' ', command)[1::])
 
-    if room.treasure and match(room.treasure.name, target):
+    if room.treasure and match(room.treasure.name, target, re.I):
       self.player.add_item(room.treasure)
       print "You shove the %s into your pocket." % room.treasure.name
       room.treasure = False
-    elif room.weapon and match(room.weapon.name, target):
+    elif room.weapon and match(room.weapon.name, target, re.I):
       self.player.add_weapon(room.weapon)
       print "You now have a wonderful %s to hurt things with." % room.weapon.name
       room.weapon = False
@@ -296,7 +297,7 @@ class Action():
 
 
   def check_enemy(self, command):
-    return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
+    return match(split(' ', command)[-1], self.state.current_room().monster.type, re.I) and self.state.current_room().monster.alive
 
   def attack(self, command):
     monster = self.state.current_room().monster
