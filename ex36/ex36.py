@@ -3,6 +3,7 @@ from random import randint
 from re import match
 from re import split
 from re import findall
+from re import search
 
 monsters = ['Troll', 'Goblin', 'Ogre', 'Hobgoblin', 'Politician', 'Grue']
 enemy_levels = [['Tough', 200, 20], ['Average', 100, 10], ['Wimpy', 50, 5]]
@@ -239,18 +240,20 @@ class Action():
     self.player = player
     self.state = state
 
-  def move(self, state, direction):
-    exit_direction = split(' ', state.current_room().exit)[-1]
-    enter_direction = split(' ', state.current_room().enter)[-1]
+  def move(self, state, command):
+    exit_direction = state.current_room().exit
+    enter_direction = state.current_room().enter
 
-    if findall(exit_direction, direction):
+    direction = ' '.join(split(' ', command)[1::])
+
+    if search(direction, exit_direction):
       if state.last_room():
         print "Hooray, freedom!"
         exit(0)
       else:
         state.next_room()
         return True
-    elif findall(split(' ', state.current_room().enter)[-1], direction):
+    elif search(direction, enter_direction):
       if state.first_room():
         print "Sorry, you can't actually go that way."
         return True
