@@ -275,6 +275,15 @@ class Action():
       room.weapon = False
 
 
+  def show_inventory(self):
+    if len(player.inventory.items) > 0:
+      print "You rummage around in your pockets and find:"
+      for item in player.inventory.items:
+        print item.name
+    else:
+      print "Your pockets are empty."
+
+
   def check_enemy(self, command):
     return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
 
@@ -316,6 +325,8 @@ while True:
     action.attack(command)
   elif match('look', command):
     print state.current_room().describe()
+  elif match('inventory', command):
+    action.show_inventory()
   elif match('get', command):
     action.pick_up(command)
   elif match('quit', command):
