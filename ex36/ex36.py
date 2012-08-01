@@ -73,17 +73,17 @@ class Room:
       self.generate_monster()
       self.treasure = False
       self.weapon = False
-      self.description = 'Some rubble here, also a %s %s %s.' % (self.monster.state, self.monster.title, self.monster.type)
+      self.description = 'Some rubble here.'
     elif number == 2:
       self.generate_monster()
       self.generate_treasure()
       self.weapon = False
-      self.description = 'Pillars, Piles of junk, and a %s %s %s.  Oh look! %s.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name)
+      self.description = 'Pillars and Piles of junk.'
     elif number == 3:
       self.generate_monster()
       self.generate_treasure()
       self.generate_weapon()
-      self.description = 'Fancy schmancy!  All kinds of wonderful things here.  A %s %s %s.  In the corner we have %s. There is also a %s in the middle of the room.' % (self.monster.state, self.monster.title, self.monster.type, self.treasure.name, self.weapon.name)
+      self.description = 'Fancy schmancy!  All kinds of wonderful things here.'
 
   def monster(self):
     self.monster
@@ -95,7 +95,16 @@ class Room:
     self.weapon
 
   def describe(self):
-    return(self.description + '  You see a door %s and another one %s.' % (self.exit, self.enter))
+    current_state = self.description
+
+    if self.monster:
+      current_state += '  You see a %s %s %s.' % (self.monster.state, self.monster.title, self.monster.type)
+    if self.treasure:
+      current_state += '  Oh look!  %s.' % self.treasure.name
+    if self.weapon:
+      current_state += '  A %s sits in the middle of the room.' % self.weapon.name
+
+    return(current_state + '  You see a door %s and another one %s.' % (self.exit, self.enter))
 
 
 class Monster:
@@ -243,12 +252,14 @@ class Action():
     else:
       return(False)
 
+
   def check_clear(self, state, command):
     if state.current_room().monster and state.current_room().monster.alive:
       print "The %s won't let you!" % state.current_room().monster.type
       return(False)
     else:
       return self.move(state, command)
+
 
   def pick_up(self, command):
     room = self.state.current_room()
@@ -257,9 +268,12 @@ class Action():
     if room.treasure and match(room.treasure.name, target):
       self.player.add_item(room.treasure)
       print "You shove the %s into your pocket." % room.treasure.name
+      room.treasure = False
     elif room.weapon and match(room.weapon.name, target):
       self.player.add_weapon(room.weapon)
       print "You now have a wonderful %s to hurt things with." % room.weapon.name
+      room.weapon = False
+
 
   def check_enemy(self, command):
     return match(split(' ', command)[-1], self.state.current_room().monster.type) and self.state.current_room().monster.alive
