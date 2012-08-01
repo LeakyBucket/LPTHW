@@ -322,7 +322,7 @@ print "You enter the Labrynth..."
 print "You find yourself in a room.  %s" % state.current_room().describe()
 
 while True:
-  command = raw_input('What do you do> ')
+  command = raw_input('What do you do?> ')
 
   if match('go', command):
     if action.check_clear(state, command):
